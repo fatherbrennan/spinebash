@@ -1,0 +1,6 @@
+/**
+ * 
+ * 
+ * @fatherbrennan
+ */
+html{font-size:16px;}body{margin:0;width:100vw;height:100vh;}.window{height:100%;width:100%;}.frame{min-height:29px;max-height:29px;}.app{flex-wrap:nowrap;}.nav{flex:1 10 100%;}.app,.main,.frame,.window,.flex-row,.flex-col,.flex{display:flex;}.flex-row{flex-direction:row;}.app,.window,.flex-col{flex-direction:column;}.app,.main,.frame,.flex-row,.flex-col{flex:1 1 100%;}.view{display:none;}.view:target{display:block !important;}.flex-col{background-color:lightcoral;}.flex-row{background-color:lightblue;}

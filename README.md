@@ -1,15 +1,5 @@
 # Spinebash
 This is a Bash-built, dependency-free SPA framework which allows for a modular programming experience using HTML, CSS and JavaScript. 
-
-
-and thus there are multiple limitations that could be fixed with added dependencies - notably compression tools such as the popular [Terser](https://github.com/terser/terser) and [UglifyJS](https://github.com/mishoo/UglifyJS).
-
-
-
-
-
-
-
 ## File Structure
 **Resources/**
 
@@ -75,11 +65,8 @@ ROUTE 'test/' VIEW 'test_dir/test_file'
 ```
 `js/app.js`
 ```js
-// Store element object
-const el_home = document.getElementById('button');
-
-// On click event, redirect to the test page (declared in routes.sh)
-el_home.addEventListener('click',function(){
+// On element click, redirect to the test page (declared in routes.sh)
+document.getElementById('button').addEventListener('click',function(){
     redirect('test/');
 })
 ```
@@ -98,6 +85,16 @@ It is recommended to create a single file if possible for performance.
 
 **Compresson**
 
-Written code will not be minified or validated
+CSS and HTML compression support is good assuming correct coding practices. JavaScript compression support is beta, and support is limited (not recommended).
+
+Pros
+- Remove comments
+- Remove whitespace
+
+Cons
 - Variable names are unchanged
-- Semicolons not added
+- Semicolons not inserted
+
+**Optional features**
+
+Adding your own dependencies such as the popular [Terser](https://github.com/terser/terser) and [UglifyJS](https://github.com/mishoo/UglifyJS) JavaScript compression tools could advance your application.

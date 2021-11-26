@@ -6,7 +6,7 @@ window.addEventListener('DOMContentLoaded', function() {
 });
 
 
-const el_home = document.getElementById('home-page');
+const el_home = document.getElementById('button');
 el_home.addEventListener('click',function(){
     redirect('test/');
 })

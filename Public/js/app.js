@@ -6,8 +6,10 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+document.getElementById('home-button').addEventListener('click',function(){
+    redirect('newpage/');
+})
 
-const el_home = document.getElementById('home-page');
-el_home.addEventListener('click',function(){
-    redirect('register/');
+document.getElementById('newpage-button').addEventListener('click',function(){
+    redirect('home/');
 })

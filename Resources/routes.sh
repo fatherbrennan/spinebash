@@ -4,14 +4,15 @@
 ################################################################
 # 
 # ROUTE
+#  ->Unique
 #  ->URL Hash route
 # 
 # VIEW
-#  ->File name (no extension: assumed html)
 #  ->Unique
+#  ->File name (no extension: assumed html)
 #  ->Relative path from: 'Resources/views/content'
 # 
 # 
 
 ROUTE 'home/' VIEW 'index'
-ROUTE 'test/' VIEW 'test_dir/test_file'
+ROUTE 'newpage/' VIEW 'new_page_dir/new_page_file'

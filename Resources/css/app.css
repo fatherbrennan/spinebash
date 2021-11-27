@@ -1,6 +1,18 @@
-.flex-col {
+body {
+	font-family: arial;
+}
+
+.homepage {
     background-color: lightcoral;
 }
-.flex-row {
+
+.newpage {
     background-color: lightblue;
+}
+
+.btn {
+	background-color: azure;
+	border-radius: .5rem;
+	padding: 0.375rem;
+	width: fit-content;
 }

@@ -10,7 +10,7 @@
 app="$(cd "$(dirname "${BASH_SOURCE[0]}")";pwd -P)/"
 
 # Exit if no args
-[ -z "$1" ] && echo -e "Invalid command: <<Empty argument>>\n Usage: $0 <command>" && exit 1
+[ -z "$1" ] && echo -e "Invalid command: <<Empty argument>>\n Usage: spine <command>" && exit 1
 
 # Return help
 show_help()
@@ -20,7 +20,7 @@ show_help()
 
 # Args
 case $1 in
-    dev)
+    dev | start)
         "${app}Framework/Scripts/dev.sh" "$app"
     ;;
     clear)

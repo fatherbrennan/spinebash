@@ -10,6 +10,9 @@ app=$1
 # Track asset files
 assets=""
 
+# Create cache if it doesn't exist
+[ -d "${app}Framework/Scripts/cache/tmp" ] || mkdir -p "${app}Framework/Scripts/cache/tmp"
+
 # Run build scripts
 "${app}Framework/Scripts/_get_routes.sh" || exit 1
 "${app}Framework/Scripts/_make_css.sh" || exit 1

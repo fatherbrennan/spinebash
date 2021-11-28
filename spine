@@ -15,13 +15,36 @@ app="$(cd "$(dirname "${BASH_SOURCE[0]}")";pwd -P)/"
 # Return help
 show_help()
 {
-    echo -e "\e[1mspine\e[0m\n Usage: $0 <command>\n\n\e[4mcommands\e[0m\n\n \e[1mdev, start\e[0m\n\tbuild app assets in dev mode\n\n \e[1mclear\e[0m\n\tclear the framework cache including assets\n\n \e[1m-h, --help\e[0m\n\tdisplay command info"
+    echo -e "\e[1mspine\e[0m\n Usage: $0 <command>\n\n\e[4mcommands\e[0m\n\n \e[1mdev, start\e[0m\n\tbuild app assets in dev mode\n\n \e[1mopen\e[0m\n\topen the app in the default web browser\n\n \e[1mclear\e[0m\n\tclear the framework cache including assets\n\n \e[1m-h, --help\e[0m\n\tdisplay command info"
 }
 
 # Args
 case $1 in
     dev | start)
         "${app}Framework/Scripts/dev.sh" "$app"
+    ;;
+    open)
+        # OS check
+        a="$(uname -s)"
+        case "${a}"
+        in
+            Linux*)
+                cmd='xdg-open'
+            ;;
+            Darwin*)
+                cmd='open'
+            ;;
+            CYGWIN*)
+                cmd='cmd.exe /C start'
+            ;;
+            MINGW*)
+                cmd='start'
+            ;;
+            *)
+                echo "UNKNOWN MACHINE: ${a}"
+        esac
+        # Open homepage in default browser
+        $cmd "file://$(pwd -W)/Public/index.html"
     ;;
     clear)
         "${app}Framework/Scripts/cache_clear.sh" "$app"

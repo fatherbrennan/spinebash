@@ -34,12 +34,15 @@ Executable file acting as the Spinebash framework console.
 `spine --help`
 ```
 spine
- Usage: /usr/bin/bash <command>
+ Usage: spine <command>
 
 commands
 
  dev, start
         build app assets in dev mode
+
+ open
+        open the app in the default web browser
 
  clear
         clear the framework cache including assets

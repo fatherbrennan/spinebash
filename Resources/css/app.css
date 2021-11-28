@@ -7,12 +7,19 @@ body {
 }
 
 .newpage {
-    background-color: lightblue;
+    background-color: lightseagreen;
 }
 
 .btn {
-	background-color: azure;
 	border-radius: .5rem;
 	padding: 0.375rem;
 	width: fit-content;
+	border: 1px solid azure;
+	color: azure;
+	cursor: pointer;
+}
+
+.btn:hover {
+	background-color: azure;
+	color: black;
 }

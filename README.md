@@ -34,11 +34,11 @@ Executable file acting as the Spinebash framework console.
 `spine --help`
 ```
 spine
- Usage: spine <command>
+ Usage: spine <command> <extension>
 
 commands
 
- dev, start
+ start, dev
         build app assets in dev mode
 
  open
@@ -49,6 +49,23 @@ commands
 
  -h, --help
         display command info
+
+extensions
+
+ -s, --script
+        extends [ start ] [ dev ]
+          run config SCRIPT_TAIL after spine build process
+
+exmaples
+
+ spine dev --script
+        run dev build process and then run config defined script
+        where SCRIPT_TAIL="npm dev". Can be used within framework
+        environments such as the Electron framework
+
+ spine open
+        open the Public/index.html file using the machine's
+        default web browser
 ```
 *Note: `dev` and `start` commands are currently the same*
 ## Routing

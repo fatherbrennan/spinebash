@@ -9,19 +9,34 @@
 # Get relative path
 app="$(cd "$(dirname "${BASH_SOURCE[0]}")";pwd -P)/"
 
+usage()
+{
+    echo "Usage: spine <command> <extension>"
+}
+
 # Exit if no args
-[ -z "$1" ] && echo -e "Invalid command: <<Empty argument>>\n Usage: spine <command>" && exit 1
+[ -z "$1" ] && echo -e "Invalid command: <<Empty argument>>\n $(usage)" && exit 1
+
+# Imports
+source '.config'
 
 # Return help
 show_help()
 {
-    echo -e "\e[1mspine\e[0m\n Usage: $0 <command>\n\n\e[4mcommands\e[0m\n\n \e[1mdev, start\e[0m\n\tbuild app assets in dev mode\n\n \e[1mopen\e[0m\n\topen the app in the default web browser\n\n \e[1mclear\e[0m\n\tclear the framework cache including assets\n\n \e[1m-h, --help\e[0m\n\tdisplay command info"
+    echo -e "\e[1mspine\e[0m\n $(usage)\n\n\e[4mcommands\e[0m\n\n \e[1mstart, dev\e[0m\n\tbuild app assets in dev mode\n\n \e[1mopen\e[0m\n\topen the app in the default web browser\n\n \e[1mclear\e[0m\n\tclear the framework cache including assets\n\n \e[1m-h, --help\e[0m\n\tdisplay command info\n\n\e[4mextensions\e[0m\n\n \e[1m-s, --script\e[0m\n\textends [ start ] [ dev ]\n\t  run config SCRIPT_TAIL after spine build process\n\n\e[4mexmaples\e[0m\n\n \e[1mspine dev --script\e[0m\n\trun dev build process and then run config defined script\n\twhere SCRIPT_TAIL=\"npm dev\". Can be used within framework\n\tenvironments such as the Electron framework\n\n \e[1mspine open\e[0m\n\topen the Public/index.html file using the machine's\n\tdefault web browser"
 }
 
 # Args
 case $1 in
     dev | start)
         "${app}Framework/Scripts/dev.sh" "$app"
+        if [ -n "$2" ]
+        then
+            case $2 in
+                -s | --script) $SCRIPT_TAIL ;;
+                *) echo "Warning: '${2}' is not a valid extension" ;;
+            esac
+        fi
     ;;
     open)
         # OS check
@@ -53,6 +68,6 @@ case $1 in
         show_help
     ;;
     *)
-        echo -e "Invalid argument:\n Usage: $0 <command>";exit 1
+        echo -e "Invalid argument:\n $(usage)";exit 1
     ;;
 esac

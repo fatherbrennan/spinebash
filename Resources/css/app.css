@@ -17,6 +17,7 @@ body {
 	border: 1px solid azure;
 	color: azure;
 	cursor: pointer;
+	text-decoration: none;
 }
 
 .btn:hover {

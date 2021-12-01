@@ -5,12 +5,8 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Click the button on home page to redirect to the newpage
-document.getElementById('home-button').addEventListener('click',function(){
-    redirect('newpage/');
-})
-
-// Click the button on the new page to redirect back to the homepage
+// JavaScript navigation
+// -> Click the button on the new page to redirect back to the homepage
 document.getElementById('newpage-button').addEventListener('click',function(){
     redirect('home/');
 })

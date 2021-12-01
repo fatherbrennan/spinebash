@@ -71,7 +71,7 @@ exmaples
 ## Routing
 Self implemented HashRouter using hash anchors.
 
-**Usage**
+**Declare**
 
 `routes.sh`
 |Variable|Description|
@@ -83,9 +83,19 @@ Self implemented HashRouter using hash anchors.
 ROUTE 'home/' VIEW 'index'
 ROUTE 'test/' VIEW 'test_dir/test_file'
 ```
-`js/app.js`
+**Option 1: HTML**
+
+```html
+<a href="#test/" class="btn">Go New Page</a>
+```
+
+**Option 2: JavaScript**
+
+```html
+<span id="button" class="btn">Go New Page</span>
+```
 ```js
-// On element click, redirect to the test page (declared in routes.sh)
+// On element click, redirect to new page
 document.getElementById('button').addEventListener('click',function(){
     redirect('test/');
 })
@@ -115,6 +125,12 @@ Cons
 - Variable names are unchanged
 - Semicolons not inserted
 
-**Optional features**
+## Third-Party Support
 
-Adding your own dependencies such as the popular [Terser](https://github.com/terser/terser) and [UglifyJS](https://github.com/mishoo/UglifyJS) JavaScript compression tools could advance your application.
+The Spinebash framework does not, and tries not to limit developer-preferred dependencies.
+
+### Recommendations
+
+**Compressors**
+
+The popular [Terser](https://github.com/terser/terser) and [UglifyJS](https://github.com/mishoo/UglifyJS) for JavaScript compression.

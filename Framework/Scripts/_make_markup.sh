@@ -55,7 +55,7 @@ do
         r=$(echo "${f%.*}" | sed -e 's#Resources/views/content/##')
         route=$(grep -ws "'${r}'" "$routes" | sed "s#^[^']*'\([^']*\)'.*#\1#")
         # Wrap content view
-        views+=$(cat "${dw}wrap" | sed -e "/{{ view }}/{r $f" -e "d}" | sed -e "s@{{ route }}@/${route}@")
+        views+=$(cat "${dw}wrap" | sed -e "/{{ view }}/{r $f" -e "d}" | sed -e "s@{{ route }}@${route}@")
     fi
 done
 

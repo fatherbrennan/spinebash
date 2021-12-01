@@ -1,1 +1,1 @@
-function redirect(route){window.location.hash=`/${route}`;}
+function redirect(route){window.location.hash=`${route}`;}

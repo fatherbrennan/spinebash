@@ -17,7 +17,7 @@ This directory contains all the framework resources.
 
 File containing configuration variables taking Boolean assignments ( `true` or `false` ).
 
-**set_bash_alias.sh**
+**set_alias.sh**
 
 Temporary initialisation file to create the `spine` alias command used for the spine console. The alias will be added to the Bash and Zsh *rc file (although all scripts will use Bash interpreter).
 ```sh

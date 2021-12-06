@@ -41,6 +41,7 @@ case $1 in
     open)
         # OS check
         a="$(uname -s)"
+        b="$(pwd)"
         case "${a}"
         in
             Linux*)
@@ -54,12 +55,13 @@ case $1 in
             ;;
             MINGW*)
                 cmd='start'
+                b="$(pwd -W)"
             ;;
             *)
                 echo "UNKNOWN MACHINE: ${a}"
         esac
         # Open homepage in default browser
-        $cmd "file://$(pwd -W)/Public/index.html"
+        $cmd "file://${b}/Public/index.html"
     ;;
     clear)
         "${app}Framework/Scripts/cache_clear.sh" "$app"

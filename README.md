@@ -19,12 +19,14 @@ File containing configuration variables taking Boolean assignments ( `true` or `
 
 **set_bash_alias.sh**
 
-Temporary initialisation file to create the `spine` Bash alias used for the spine console.
+Temporary initialisation file to create the `spine` alias command used for the spine console. The alias will be added to the Bash and Zsh *rc file (although all scripts will use Bash interpreter).
 ```sh
 # Run setup command
-. ./set_bash_alias.sh
+. ./set_alias.sh
 ```
 *Note: file should be removed after initialisation*
+
+*Note: file may need correct permissions: `chmod 755 set_alias.sh`*
 
 
 **spine**

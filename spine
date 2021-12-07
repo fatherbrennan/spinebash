@@ -29,8 +29,8 @@ show_help()
 # Args
 case $1 in
     dev | start)
-        "${app}Framework/Scripts/dev.sh" "$app"
-        if [ -n "$2" ]
+        "${app}Framework/Scripts/dev.sh" "$app" && cont=true || cont=false
+        if [ -n "$2" ] && [ "$cont" == "true" ]
         then
             case $2 in
                 -s | --script) $SCRIPT_TAIL ;;

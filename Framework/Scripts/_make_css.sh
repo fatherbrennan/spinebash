@@ -1,5 +1,5 @@
 #! /bin/bash
-# 
+#
 # @fatherbrennan
 
 # Imports
@@ -14,9 +14,6 @@ b='Resources/css/'
 
 # Controller
 router_css='Framework/Controllers/localRouterController.css'
-
-# Compressor
-compressor='Framework/Scripts/Compressors/_compress_css.sh'
 
 # Limit temp files to the framework cache
 tmp1="Framework/Scripts/cache/tmp/.tmp${RANDOM}"
@@ -42,8 +39,22 @@ do
     cat "$f">>"$tmp1"
 done
 
-# Check config file and compress asset file if true
-is_true "$COMPRESS_CSS" && $compressor "$tmp1" "$a" || echo "$(cat $tmp1)">"$a"
+# Add asset
+if is_true "$COMPRESS_CSS"
+then
+    # Use framework compressor if falsy value
+    if [ -z "$USE_COMPRESSOR_CSS" ]
+    then
+        compressor='Framework/Scripts/Compressors/_compress_css.sh'
+        $compressor "$tmp1" "$a"
+    else
+        compressor=$(echo "$USE_COMPRESSOR_CSS" | sed "s%INPUT%$tmp1%" | sed "s%OUTPUT%$a%")
+        eval $compressor
+    fi
+    echo "COMPRESSOR (CSS): ${compressor}"
+else
+    echo "$(cat $tmp1)">"$a"
+fi
 
 # Remove created temp files
 rm -rf "$tmp1"

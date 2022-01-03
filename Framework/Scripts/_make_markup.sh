@@ -1,5 +1,5 @@
 #! /bin/bash
-# 
+#
 # @fatherbrennan
 
 # Imports
@@ -16,9 +16,6 @@ c='Resources/views/static/Frame/frame.html'
 d='Resources/views/content/'
 e='Resources/views/static/Head/head.html'
 routes='Resources/routes.sh'
-
-# Compressor
-compressor='Framework/Scripts/Compressors/_compress_html.sh'
 
 # Wrappers
 bw='Framework/Wrappers/Nav/'
@@ -65,7 +62,7 @@ is_true "$USE_FRAME" && do_include "$c" && frame=$(wrap_content "$cw" "$c") || f
 do_include "$e" && head=$(cat "$e") || head=""
 
 # Buld the asset file
-# 
+#
 # Head
 awk -v x='{{ head }}' -v y="$head" '{sub(x, y)}1' "$tmp1" > "$tmp2" && mv "$tmp2" "$tmp1"
 
@@ -81,8 +78,22 @@ awk -v x='{{ views }}' -v y="$views" '{sub(x, y)}1' "$tmp1" > "$tmp2" && mv "$tm
 # Scripts
 awk -v x='{{ script }}' -v y="$script" '{sub(x, y)}1' "$tmp1" > "$tmp2" && mv "$tmp2" "$tmp1"
 
-# Check config file and compress asset file if true
-is_true "$COMPRESS_HTML" && $compressor "$tmp1" "$a" || echo "$(cat $tmp1)">"$a"
+# Add asset
+if is_true "$COMPRESS_HTML"
+then
+    # Use framework compressor if falsy value
+    if [ -z "$USE_COMPRESSOR_HTML" ]
+    then
+        compressor='Framework/Scripts/Compressors/_compress_html.sh'
+        $compressor "$tmp1" "$a"
+    else
+        compressor=$(echo "$USE_COMPRESSOR_HTML" | sed "s%INPUT%$tmp1%" | sed "s%OUTPUT%$a%")
+        eval $compressor
+    fi
+    echo "COMPRESSOR (HTML): ${compressor}"
+else
+    echo "$(cat $tmp1)">"$a"
+fi
 
 # Remove created temp files
 rm -rf "$tmp1" "$tmp2" "$script"

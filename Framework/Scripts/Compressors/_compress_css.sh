@@ -1,4 +1,4 @@
 #! /bin/bash
-# 
+#
 # @fatherbrennan
-(echo -e '/**\n * \n * \n * @fatherbrennan@CSScompressor\n */'; cat $1 | sed 's@/\*.*\*/@@g;/\/\*/,/\*\//d;s/[[:blank:]]*/ /' | tr -d '\n' | tr -s ' ' ' ' | sed 's/ {/{/g;s/{ /{/g;s/} /}/g;s/ }/}/g;s/: /:/g;s/ :/:/g;s/; /;/g;s/ ;/;/g;s/, /,/g;s/ ,/,/g;s/^ *//') > $2
+(echo -en "/**\n * \n * \n * @fatherbrennan:compressor:css\n */\n"; cat $1 | tr -d '\n' | perl -pe 's`/\*(.*?)\*/``gs' | tr -s ' ' ' ' | perl -pe 's`[\s]?[{][\s]?`{`g;s`[\s]?[}][\s]?`}`g;s`[\s]?[:][\s]?`:`g;s`[\s]?[;][\s]?`;`g;s`[\s]?[,][\s]?`,`g;s`[\s]?[/][\s]?`/`g;s`[\s]?[(][\s]?`(`g;s`[\s]?[)][\s]?`)`g')>"$2"

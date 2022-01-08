@@ -9,20 +9,20 @@ source 'Framework/Scripts/Tools/is_true.sh'
 # Asset file
 a='Public/css/app.css'
 
-# Resources
+# Resources directory
 b='Resources/css/'
 
 # Controller
-router_css='Framework/Controllers/localRouterController.css'
+css_router='Framework/Controllers/localRouterController.css'
 
 # Limit temp files to the framework cache
 tmp1="Framework/Scripts/cache/tmp/.tmp${RANDOM}"
 
 # Add bootstrap css
-bs_css='Framework/Wrappers/css.css'
+css_bs='Framework/Wrappers/css.css'
 
 # Add framework css
-(cat "$bs_css";cat "$router_css")>>"$tmp1"
+(cat "$css_bs";cat "$css_router")>>"$tmp1"
 
 # Clear asset
 truncate -s 0 "$a"
@@ -30,7 +30,7 @@ truncate -s 0 "$a"
 # Track used resource files
 resources=''
 
-# Create CSS file using resources
+# Create single CSS file using resources
 for f in $(find "$b" -type f -name '*.css')
 do
     # Track populated files
@@ -49,6 +49,7 @@ then
         $compressor "$tmp1" "$a"
     else
         compressor=$(echo "$USE_COMPRESSOR_CSS" | sed "s%INPUT%$tmp1%" | sed "s%OUTPUT%$a%")
+        # Unsafe execute
         eval $compressor
     fi
     echo "COMPRESSOR (CSS): ${compressor}"

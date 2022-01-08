@@ -31,7 +31,7 @@ resources=""
 # Check config file if scripts should use defer attribute
 is_true "$JS_DEFER" && defer=' defer' || defer=''
 
-# Track router addition
+# Track if router needs to be added
 add_router=true
 
 # Add html script tag to cache
@@ -62,6 +62,7 @@ then
             add_html_script_tag "$script"
         done
     else
+        # Asset file name
         mini_js="app.min.js"
         input_files=''
         for f in $(find "$b" -type f -name '*.js')

@@ -43,11 +43,11 @@ read_routes()
         # Throw invalid declaration
         [ "ROUTE" = "${args[0]}" ] && [ "VIEW" = "${args[2]}" ] || throw_exception ': <<Invalid Syntax>>' "$1" "$2"
         # Check if VIEW is a valid file path
-        f=$(echo "${args[3]}" | sed "s/'//g")
+        f="${args[3]//\'/}"
         [ -f "Resources/views/content/${f}.html" ] || throw_exception ': <<Missing file>>' "$1" "$2"
         router_args+="$f\n"
         # Check if ROUTE is a valid url path
-        r=$(echo "${args[1]}" | sed "s/'//g")
+        r="${args[1]//\'/}"
         [[ "$r" =~ [^-[:alnum:]\/\.\_\~\#\+\?\*\&\%\!\=] ]] && throw_exception ': <<Invalid URL>>' "$1" "$2" && true
         router_args+="$r\n"
     fi

@@ -1,14 +1,16 @@
 #! /bin/bash
-# 
+#
 # @fatherbrennan
-
-# Resources
-ROUTES='Resources/routes.sh'
 
 # Imports
 source 'Framework/Scripts/Tools/ansi_esc_codes.sh'
+source 'Framework/Scripts/Tools/set_file_path.sh'
 
-# Track all router arguments 
+# Resources
+ROUTES='Resources/routes.sh'
+TMP_ROUTES='Framework/Scripts/cache/routes'
+
+# Track all router arguments
 router_args=''
 
 #
@@ -19,7 +21,7 @@ router_args=''
 throw_exception()
 {
     [ -z "$1" ] && local error_message='' || local error_message="Error: Invalid route declaration${1}\n"
-    [ -z "$2" ] && local line='' || local line="line ${2}: " 
+    [ -z "$2" ] && local line='' || local line="line ${2}: "
     [ -z "$3" ] && local error='' || local error="${COLOR_RED}${3}${TEXT_RESET}\n"
     local declaration="Declare Route: ROUTE 'url/path' VIEW 'path/to/file'"
     echo -e "${line}${error_message} ${error}${declaration}" && exit 1
@@ -32,11 +34,12 @@ throw_exception()
 read_routes()
 {
     # Turn input into array of strings
-    IFS=' ' read -r -a args <<< "$2"
-
+    IFS=' '
+    read -ra args <<< "$2"
+    
     # Throw exception for too many arguments declared
     [ "${#args[@]}" -gt "4" ] && throw_exception ': <<Too many arguments or unexpected space>>' "$1" "$2"
-
+    
     # Prossess only lines of correct arguments
     if [ "${#args[@]}" -eq "4" ]
     then
@@ -45,11 +48,11 @@ read_routes()
         # Check if VIEW is a valid file path
         f="${args[3]//\'/}"
         [ -f "Resources/views/content/${f}.html" ] || throw_exception ': <<Missing file>>' "$1" "$2"
-        router_args+="$f\n"
+        router_args+="${f}\n"
         # Check if ROUTE is a valid url path
         r="${args[1]//\'/}"
         [[ "$r" =~ [^-[:alnum:]\/\.\_\~\#\+\?\*\&\%\!\=] ]] && throw_exception ': <<Invalid URL>>' "$1" "$2" && true
-        router_args+="$r\n"
+        router_args+="${r}\n"
     fi
 }
 
@@ -64,4 +67,10 @@ done < "$ROUTES"
 
 # Check if routes and views are unique
 duplicates=$(echo -e "$router_args" | sort | uniq -d)
-[ -n "$duplicates" ] && throw_exception ': <<Duplicate>>' '' "$duplicates" || echo -n
+
+if [ -n "$duplicates" ]
+then
+    throw_exception ': <<Duplicate>>' '' "$(echo $duplicates | tr -s '\n' ' ')"
+else
+    set_file_path "$TMP_ROUTES" && echo "${router_args//\\n/ }">"$TMP_ROUTES"
+fi

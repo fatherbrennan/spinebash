@@ -5,6 +5,7 @@
 # Imports
 source '.config'
 source 'Framework/Scripts/Tools/is_true.sh'
+source 'Framework/Scripts/Tools/set_file_path.sh'
 
 # Asset file
 a='Public/css/app.css'
@@ -19,24 +20,21 @@ css_router='Framework/Controllers/localRouterController.css'
 tmp1="Framework/Scripts/cache/tmp/.tmp${RANDOM}"
 
 # Add bootstrap css
-css_bs='Framework/Wrappers/css.css'
+css_bs='Framework/css.css'
 
 # Add framework css
 (cat "$css_bs";cat "$css_router")>>"$tmp1"
 
-# Clear asset
-truncate -s 0 "$a"
-
-# Track used resource files
-resources=''
+# Prepare asset
+set_file_path "$a"
 
 # Create single CSS file using resources
 for f in $(find "$b" -type f -name '*.css')
 do
     # Track populated files
-    [ -s "$f" ] && resources+="${f}\n"
+    [ -s "$f" ] && echo "$f"
     # Concatenate resources
-    cat "$f">>"$tmp1"
+    (cat "$f")>>"$tmp1"
 done
 
 # Add asset
@@ -48,17 +46,15 @@ then
         compressor='Framework/Scripts/Compressors/_compress_css.sh'
         $compressor "$tmp1" "$a"
     else
-        compressor=$(echo "$USE_COMPRESSOR_CSS" | sed "s%INPUT%$tmp1%" | sed "s%OUTPUT%$a%")
+        compressor=${USE_COMPRESSOR_CSS//INPUT/$tmp1}
+        compressor=${compressor//OUTPUT/$a}
         # Unsafe execute
         eval $compressor
     fi
     echo "COMPRESSOR (CSS): ${compressor}"
 else
-    echo "$(cat $tmp1)">"$a"
+    (cat $tmp1)>"$a"
 fi
 
 # Remove created temp files
 rm -rf "$tmp1"
-
-# Print used resources
-[ -z "$resources" ] || echo -e "$(echo $resources | sed 's/\(.*\)\\n/\1/')"

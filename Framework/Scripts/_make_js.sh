@@ -5,6 +5,7 @@
 # Imports
 source '.config'
 source 'Framework/Scripts/Tools/is_true.sh'
+source 'Framework/Scripts/Tools/set_file_path.sh'
 
 # Asset directory
 a='Public/js/'
@@ -22,11 +23,8 @@ scripts='Framework/Scripts/cache/tmp/scripts'
 # Clear directory
 rm -rf "$a"*
 
-# Clear temp script
->"$scripts"
-
-# Track used resource files
-resources=""
+# Prepare temp script
+set_file_path "$scripts"
 
 # Check config file if scripts should use defer attribute
 is_true "$JS_DEFER" && defer=' defer' || defer=''
@@ -52,7 +50,7 @@ then
             # Asset path
             script="${a}${f##*/}"
             # Track populated files
-            [ -s "$f" ] && resources+="${f}\n"
+            [ -s "$f" ] && echo "$f"
             # Add router to first asset
             is_true "$add_router" && router_contents=$(cat "$router") && add_router=false || router_contents=''
             # Check config file and compress asset file if true, then add assets
@@ -68,13 +66,15 @@ then
         for f in $(find "$b" -type f -name '*.js')
         do
             # Track populated files
-            [ -s "$f" ] && resources+="${f}\n"
+            [ -s "$f" ] && echo "$f"
             # Add router
             input_files+="${f} "
         done
         # Add script tag to temp file
         add_html_script_tag "$mini_js"
-        compressor=$(echo "$USE_COMPRESSOR_JS" | sed "s%INPUT%$input_files%" | sed "s%OUTPUT%${a}${mini_js}%")
+        compressor=${USE_COMPRESSOR_JS//INPUT/$input_files}
+        compressor=${compressor//OUTPUT/$a$mini_js}
+        # Unsafe execute
         eval $compressor
     fi
     echo "COMPRESSOR (JavaScript): ${compressor}"
@@ -84,12 +84,12 @@ else
         # Asset path
         script="${a}${f##*/}"
         # Track populated files
-        [ -s "$f" ] && resources+="${f}\n"
+        [ -s "$f" ] && echo "$f"
         # Add router to first asset
         is_true "$add_router" && router_contents=$(cat "$router") && add_router=false || router_contents=''
         # Check config file and compress asset file if true, then add assets
-        (echo -e "$router_contents"; cat "$f")>"$tmp1"
-        cat "$tmp1">"$script"
+        (echo -e "$router_contents";cat "$f")>"$tmp1"
+        (cat "$tmp1")>"$script"
         # Add script tag to temp file
         add_html_script_tag "$script"
     done
@@ -97,6 +97,3 @@ fi
 
 # Remove created temp files
 rm -rf "$tmp1"
-
-# Print used resources
-[ -z "$resources" ] || echo -e "$(echo $resources | sed 's/\(.*\)\\n/\1/')"

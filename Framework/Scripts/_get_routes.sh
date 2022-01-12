@@ -3,28 +3,26 @@
 # @fatherbrennan
 
 # Imports
-source 'Framework/Scripts/Tools/ansi_esc_codes.sh'
-source 'Framework/Scripts/Tools/set_file_path.sh'
+source 'Framework/.env'
+source "$TOOLS_ANSI_ESC_CODES"
+source "$TOOLS_SET_FILE_PATH"
 
-# Resources
-ROUTES='Resources/routes.sh'
-TMP_ROUTES='Framework/Scripts/cache/routes'
-
-# Track all router arguments
+# Track all valid routes
 router_args=''
 
 #
-# {$1} invalid route declaration error message. preferred format ': <<error_message>>'
-# {$2} line number
+# ?{$1} invalid route declaration error message. preferred format ': <<error_message>>'
+# ?{$2} line number
 # ?{$3} error
 #
 throw_exception()
 {
-    [ -z "$1" ] && local error_message='' || local error_message="Error: Invalid route declaration${1}\n"
-    [ -z "$2" ] && local line='' || local line="line ${2}: "
-    [ -z "$3" ] && local error='' || local error="${COLOR_RED}${3}${TEXT_RESET}\n"
     local declaration="Declare Route: ROUTE 'url/path' VIEW 'path/to/file'"
-    echo -e "${line}${error_message} ${error}${declaration}" && exit 1
+    local msg=()
+    [ -z "$1" ] || msg+=("Error: Invalid route declaration${1}\n")
+    [ -z "$2" ] || msg+=(" (line ${2}): ")
+    [ -z "$3" ] || msg+=(" ${COLOR_RED}${3}${TEXT_RESET}\n")
+    printf "%b" "${msg[@]}" "$declaration" && exit 1
 }
 
 #
@@ -47,12 +45,13 @@ read_routes()
         [ "ROUTE" = "${args[0]}" ] && [ "VIEW" = "${args[2]}" ] || throw_exception ': <<Invalid Syntax>>' "$1" "$2"
         # Check if VIEW is a valid file path
         f="${args[3]//\'/}"
-        [ -f "Resources/views/content/${f}.html" ] || throw_exception ': <<Missing file>>' "$1" "$2"
+        [ -f "${RESOURCES_DIR_VIEWS_CONTENT}${f}.html" ] || throw_exception ': <<Missing file>>' "$1" "$2"
         router_args+="${f}\n"
         # Check if ROUTE is a valid url path
         r="${args[1]//\'/}"
-        [[ "$r" =~ [^-[:alnum:]\/\.\_\~\#\+\?\*\&\%\!\=] ]] && throw_exception ': <<Invalid URL>>' "$1" "$2" && true
-        router_args+="${r}\n"
+        [[ "$r" =~ [^-[:alnum:]\/\.\_\~\#\+\?\*\&\%\!\=] ]] && throw_exception ': <<Invalid URL>>' "$1" "$2"
+        # Escape '&' - sed interpretes char
+        router_args+="${r//&/\\&}\n"
     fi
 }
 
@@ -63,14 +62,14 @@ do
     ((line++))
     # Dont read comments (hash lines)
     [[ "$l" =~ ^[[:space:]]*?\# ]] || read_routes "$line" "$l"
-done < "$ROUTES"
+done < "$RESOURCES_ROUTES"
 
 # Check if routes and views are unique
-duplicates=$(echo -e "$router_args" | sort | uniq -d)
+duplicates=$(printf "%b" "$router_args" | sort | uniq -d | tr -s '\n' ' ')
 
 if [ -n "$duplicates" ]
 then
-    throw_exception ': <<Duplicate>>' '' "$(echo $duplicates | tr -s '\n' ' ')"
+    throw_exception ': <<Duplicate>>' '' "$duplicates"
 else
-    set_file_path "$TMP_ROUTES" && echo "${router_args//\\n/ }">"$TMP_ROUTES"
+    set_file_path "$CACHE_ROUTES" && printf "%b" "${router_args//\\n/ }">"$CACHE_ROUTES"
 fi

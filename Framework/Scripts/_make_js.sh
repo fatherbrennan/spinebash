@@ -13,9 +13,6 @@ source "$TOOLS_SET_FILE_PATH"
 # Limit temp files to the framework cache
 tmp1=$(get_tmp)
 
-# Clear directory
-rm -rf "$PUBLIC_DIR_JS"*
-
 # Prepare script cache file
 set_file_path "$CACHE_SCRIPTS"
 

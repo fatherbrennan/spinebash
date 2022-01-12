@@ -1,6 +1,12 @@
 #! /bin/bash
-# 
+#
 # @fatherbrennan
+
+#
+# {$1} file path
+#
+# {return} 0|1
+#
 do_include()
 {
     # Check if the file exists

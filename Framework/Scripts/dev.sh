@@ -18,6 +18,9 @@ assets=()
 # Create cache directory if it doesn't exist
 [ -d "$CACHE_DIR_TMP" ] || mkdir -p "$CACHE_DIR_TMP"
 
+# Clear cache
+"$SPINE_CLEAR"
+
 # Run build scripts
 "$SCRIPTS_GET_ROUTES" || exit 1
 "$SCRIPTS_MAKE_CSS" || exit 1

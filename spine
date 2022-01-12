@@ -6,48 +6,80 @@
 # @fatherbrennan
 #
 
-# Codes
-TEXT_RESET='\033[0m'
-TEXT_BOLD='\033[1m'
-TEXT_UNDERLINE='\033[4m'
+# Imports
+source 'Framework/.env'
+source "$CONFIG"
+source "$TOOLS_IS_TRUE"
+source "$TOOLS_ANSI_ESC_CODES"
 
 # Get relative path
 app="$(cd "$(dirname "${BASH_SOURCE[0]}")";pwd -P)/"
 
+#
+# Print command usage
+#
 usage()
 {
-    echo "Usage: spine <command> <extension>"
+    printf 'Usage: spine <command> <extension>'
+}
+
+#
+# Print command help
+#
+show_help()
+{
+    printf "${TEXT_BOLD}spine${TEXT_RESET}\n $(usage)\n\n${TEXT_UNDERLINE}commands${TEXT_RESET}\n\n ${TEXT_BOLD}start, dev${TEXT_RESET}\n\tbuild app assets in dev mode\n\n ${TEXT_BOLD}open${TEXT_RESET}\n\topen the app in the default web browser\n\n ${TEXT_BOLD}clear${TEXT_RESET}\n\tclear the framework cache including assets\n\n ${TEXT_BOLD}-h, --help${TEXT_RESET}\n\tdisplay command info\n\n${TEXT_UNDERLINE}extensions${TEXT_RESET}\n\n ${TEXT_BOLD}-s, --script${TEXT_RESET}\n\textends [ start ] [ dev ]\n\t  run config SCRIPT_TAIL after spine build process\n\n${TEXT_UNDERLINE}exmaples${TEXT_RESET}\n\n ${TEXT_BOLD}spine dev --script${TEXT_RESET}\n\trun dev build process and then run config defined script\n\twhere SCRIPT_TAIL=\"npm dev\". Can be used within framework\n\tenvironments such as the Electron framework\n\n ${TEXT_BOLD}spine open${TEXT_RESET}\n\topen the Public/index.html file using the machine's\n\tdefault web browser"
+}
+
+#
+# Print help redirect
+#
+show_help_redirect()
+{
+    printf '%s' "Use 'spine --help' for more information"
+}
+
+#
+# Throw exception
+#
+# ?{$1} specific error
+# ?{$2} description line 1 (commonly command usage)
+# ?{$3} description line 2
+#
+throw_invalid_exception()
+{
+    local invalid='Invalid command: '
+    local msg=()
+    [ -z "$1" ] || msg+=("<<${1}>>\n")
+    [ -z "$2" ] || msg+=("${2}\n")
+    [ -z "$3" ] || msg+=("${3}\n")
+    printf "%b" "$invalid" "${msg[@]}" && exit 1
 }
 
 # Exit if no args
-[ -z "$1" ] && echo -e "Invalid command: <<Empty argument>>\n $(usage)" && exit 1
+[ -z "$1" ] && throw_invalid_exception 'Empty argument' " $(usage)"
 
-# Imports
-source '.config'
-
-# Return help
-show_help()
-{
-    echo -e "${TEXT_BOLD}spine${TEXT_RESET}\n $(usage)\n\n${TEXT_UNDERLINE}commands${TEXT_RESET}\n\n ${TEXT_BOLD}start, dev${TEXT_RESET}\n\tbuild app assets in dev mode\n\n ${TEXT_BOLD}open${TEXT_RESET}\n\topen the app in the default web browser\n\n ${TEXT_BOLD}clear${TEXT_RESET}\n\tclear the framework cache including assets\n\n ${TEXT_BOLD}-h, --help${TEXT_RESET}\n\tdisplay command info\n\n${TEXT_UNDERLINE}extensions${TEXT_RESET}\n\n ${TEXT_BOLD}-s, --script${TEXT_RESET}\n\textends [ start ] [ dev ]\n\t  run config SCRIPT_TAIL after spine build process\n\n${TEXT_UNDERLINE}exmaples${TEXT_RESET}\n\n ${TEXT_BOLD}spine dev --script${TEXT_RESET}\n\trun dev build process and then run config defined script\n\twhere SCRIPT_TAIL=\"npm dev\". Can be used within framework\n\tenvironments such as the Electron framework\n\n ${TEXT_BOLD}spine open${TEXT_RESET}\n\topen the Public/index.html file using the machine's\n\tdefault web browser"
-}
-
-# Args
-case $1 in
+#
+# Handle command arguments
+#
+case "$1" in
     dev | start)
-        "${app}Framework/Scripts/dev.sh" "$app" && cont=true || cont=false
-        if [ -n "$2" ] && [ "$cont" == "true" ]
+        shift
+        EXTENSION=''
+        if [ -n "$1" ]
         then
-            case $2 in
-                -s | --script) $SCRIPT_TAIL ;;
-                *) echo "Warning: '${2}' is not a valid extension" ;;
+            case "$1" in
+                -s | --script) EXTENSION="$SCRIPT_TAIL" ;;
+                *) throw_invalid_exception "'${1}' is not a valid extension" " $(usage)" "$(show_help_redirect)";;
             esac
         fi
+        "$SPINE_DEV" "$app" && [ -n "$EXTENSION" ] && "$EXTENSION"
     ;;
     open)
         # OS check
         a="$(uname -s)"
         b="$(pwd)"
-        case "${a}"
+        case "$a"
             in
             Linux*)
                 cmd='xdg-open'
@@ -63,18 +95,18 @@ case $1 in
                 b="$(pwd -W)"
             ;;
             *)
-                echo "UNKNOWN MACHINE: ${a}"
+                printf '%s' "UNKNOWN MACHINE: ${a}"
         esac
         # Open homepage in default browser
-        $cmd "file://${b}/Public/index.html"
+        "$cmd" "file://${b}/Public/index.html" && exit 0
     ;;
     clear)
-        "${app}Framework/Scripts/cache_clear.sh" "$app"
+        "$SPINE_CLEAR" && exit 0
     ;;
     -h | --help)
-        show_help
+        show_help && exit 0
     ;;
     *)
-        echo -e "Invalid argument:\n $(usage)";exit 1
+        throw_invalid_exception 'Invalid argument' " $(usage)" "$(show_help_redirect)"
     ;;
 esac

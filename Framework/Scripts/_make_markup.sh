@@ -100,4 +100,4 @@ else
 fi
 
 # Remove created temp files
-rm -rf "$tmp1" "$tmp2" "$CACHE_SCRIPTS"
+rm -rf "$tmp1" "$tmp2" "$CACHE_SCRIPTS" "$CACHE_ROUTES"

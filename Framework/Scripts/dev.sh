@@ -5,6 +5,7 @@
 # Start runtime timer
 t1=$(date +%s.%N)
 
+# Imports
 source 'Framework/.env'
 source "$TOOLS_ANSI_ESC_CODES"
 
@@ -15,13 +16,13 @@ app="$1"
 assets=()
 
 # Create cache directory if it doesn't exist
-[ -d "${app}Framework/Scripts/cache/tmp" ] || mkdir -p "${app}Framework/Scripts/cache/tmp"
+[ -d "$CACHE_DIR_TMP" ] || mkdir -p "$CACHE_DIR_TMP"
 
 # Run build scripts
-"${app}Framework/Scripts/_get_routes.sh" || exit 1
-"${app}Framework/Scripts/_make_css.sh" || exit 1
-"${app}Framework/Scripts/_make_js.sh" || exit 1
-"${app}Framework/Scripts/_make_markup.sh" || exit 1
+"$SCRIPTS_GET_ROUTES" || exit 1
+"$SCRIPTS_MAKE_CSS" || exit 1
+"$SCRIPTS_MAKE_JS" || exit 1
+"$SCRIPTS_MAKE_MARKUP" || exit 1
 
 #
 # {$1} string to print [ expandable string ]
@@ -36,7 +37,7 @@ print_box()
 }
 
 # Loop through all asset files
-for f in $(find "${app}Public/" -type f)
+for f in $(find "$PUBLIC_DIR" -type f)
 do
     # Track assets relative path
     assets+=("${f//$app}")

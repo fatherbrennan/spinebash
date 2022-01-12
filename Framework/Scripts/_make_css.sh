@@ -3,36 +3,27 @@
 # @fatherbrennan
 
 # Imports
-source '.config'
-source 'Framework/Scripts/Tools/is_true.sh'
-source 'Framework/Scripts/Tools/set_file_path.sh'
+source 'Framework/.env'
+source "$CONFIG"
+source "$TOOLS_GET_TMP"
+source "$TOOLS_IS_TRUE"
+source "$TOOLS_PRINT_L"
+source "$TOOLS_SET_FILE_PATH"
 
 # Asset file
-a='Public/css/app.css'
-
-# Resources directory
-b='Resources/css/'
-
-# Controller
-css_router='Framework/Controllers/localRouterController.css'
+asset_css=''
 
 # Limit temp files to the framework cache
-tmp1="Framework/Scripts/cache/tmp/.tmp${RANDOM}"
-
-# Add bootstrap css
-css_bs='Framework/css.css'
+tmp1=$(get_tmp)
 
 # Add framework css
-(cat "$css_bs";cat "$css_router")>>"$tmp1"
-
-# Prepare asset
-set_file_path "$a"
+(cat "$BOOTSTRAP_CSS";cat "$CONTROLLERS_LOCAL_CSS")>>"$tmp1"
 
 # Create single CSS file using resources
-for f in $(find "$b" -type f -name '*.css')
+for f in $(find "$RESOURCES_DIR_CSS" -type f -name '*.css')
 do
     # Track populated files
-    [ -s "$f" ] && echo "$f"
+    [ -s "$f" ] && print_l "$f"
     # Concatenate resources
     (cat "$f")>>"$tmp1"
 done
@@ -40,20 +31,28 @@ done
 # Add asset
 if is_true "$COMPRESS_CSS"
 then
+    # Use compressed file path
+    asset_css="${PUBLIC_DIR_CSS}${OUTPUT_COMPRESSED_CSS}"
+    # Prepare asset
+    set_file_path "$asset_css"
     # Use framework compressor if falsy value
     if [ -z "$USE_COMPRESSOR_CSS" ]
     then
-        compressor='Framework/Scripts/Compressors/_compress_css.sh'
-        $compressor "$tmp1" "$a"
+        compressor="$COMPRESSORS_CSS"
+        $compressor "$tmp1" "$asset_css"
     else
         compressor=${USE_COMPRESSOR_CSS//INPUT/$tmp1}
-        compressor=${compressor//OUTPUT/$a}
+        compressor=${compressor//OUTPUT/$asset_css}
         # Unsafe execute
         eval $compressor
     fi
     echo "COMPRESSOR (CSS): ${compressor}"
 else
-    (cat $tmp1)>"$a"
+    # Use uncompressed file path
+    asset_css="${PUBLIC_DIR_CSS}${OUTPUT_UNCOMPRESSED_CSS}"
+    # Prepare asset
+    set_file_path "$asset_css"
+    (cat "$tmp1")>"$asset_css"
 fi
 
 # Remove created temp files

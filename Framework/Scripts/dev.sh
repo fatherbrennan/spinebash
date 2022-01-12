@@ -29,10 +29,10 @@ assets=()
 #
 print_box()
 {
-    local a=("$@");local b=$(tput cols)-3;local c='\u2500';local d='\u2502';printf "$TEXT_DIM";local l="${#a[@]}"
     p(){ printf "$1"; };p_line(){ for ((i=0;i<=$b;i++));do p "$c";done }
+    local a=("$@");local b=$(tput cols)-3;local c='\u2500';local d='\u2502';p "$TEXT_DIM";local l="${#a[@]}"
     p '\u250c';p_line;p '\u2510'
-    for ((i=0;i<"$l";i++));do local e=$(($b-${#a[i]}));p "$d";printf "%${e}s";p "${TEXT_RESET}${COLOR_GREEN}${a[i]}${TEXT_RESET}${TEXT_DIM} ${d}";done
+    for ((i=0;i<"$l";i++));do local e=$(($b-${#a[i]}));p "$d";p "%${e}s";p "${TEXT_RESET}${COLOR_GREEN}${a[i]}${TEXT_RESET}${TEXT_DIM} ${d}";done
     p '\u2514';p_line;p '\u2518'
 }
 

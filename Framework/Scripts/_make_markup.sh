@@ -3,31 +3,17 @@
 # @fatherbrennan
 
 # Imports
-source '.config'
-source 'Framework/Scripts/Tools/is_true.sh'
-source 'Framework/Scripts/Tools/do_include.sh'
-source 'Framework/Scripts/Tools/insert_file_contents.sh'
-
-# Asset file
-a='Public/index.html'
-
-# Resources
-VIEW_NAV='Resources/views/static/Nav/nav.html'
-VIEW_FRAME='Resources/views/static/Frame/frame.html'
-VIEW_HEAD='Resources/views/static/Head/head.html'
-d='Resources/views/content/'
-TMP_ROUTES='Framework/Scripts/cache/routes'
-
-# Wrappers
-WRAPPER_FRAME='Framework/Wrappers/Frame/wrap'
-WRAPPER_NAV='Framework/Wrappers/Nav/wrap'
-WRAPPER_VIEW='Framework/Wrappers/View/wrap'
-LAYOUT='Framework/layout'
+source 'Framework/.env'
+source "$CONFIG"
+source "$TOOLS_DO_INCLUDE"
+source "$TOOLS_GET_TMP"
+source "$TOOLS_INSERT_FILE_CONTENTS"
+source "$TOOLS_IS_TRUE"
+source "$TOOLS_PRINT_L"
 
 # Limit temp files to the framework cache
-tmp1="Framework/Scripts/cache/tmp/.tmp${RANDOM}"
-tmp2="Framework/Scripts/cache/tmp/.tmp${RANDOM}"
-script="Framework/Scripts/cache/tmp/scripts"
+tmp1=$(get_tmp)
+tmp2=$(get_tmp)
 
 # Use clean layout
 (cat "$LAYOUT")>"$tmp1"
@@ -41,7 +27,7 @@ script="Framework/Scripts/cache/tmp/scripts"
 remove_placeholder_in_asset()
 {
     local a=$(sed "s/$1//" "$tmp1")
-    echo "$a">"$tmp1"
+    printf '%s' "$a">"$tmp1"
 }
 
 #
@@ -58,18 +44,18 @@ wrap_and_insert_in_asset()
 }
 
 # Get declared routes from cache
-IFS=' ' read -ra routes_array <<< "$(cat $TMP_ROUTES)"
+IFS=' ' read -ra routes_array <<< "$(cat $CACHE_ROUTES)"
 routes_array_len="${#routes_array[@]}"
 
 # Loop through all content views
-for f in $(find "$d" -type f -name '*.html')
+for f in $(find "$RESOURCES_DIR_VIEWS_CONTENT" -type f -name '*.html')
 do
     # Only add populated views
     if do_include "$f"
     then
         # Get view route (held in next index from view)
         r="${f%.*}"
-        r="${r#$d*}"
+        r="${r#$RESOURCES_DIR_VIEWS_CONTENT*}"
         for ((i=0;i<${routes_array_len};i++));
         do
             if [ "${routes_array[$i]}" = "$r" ]
@@ -79,20 +65,20 @@ do
             fi
         done
         # Add view route to view wrapper
-        (cat "$WRAPPER_VIEW" | sed "s,{{\s*route\s*}},$view_route,")>>"$tmp2"
+        (sed "s,${PLACEHOLDER_ROUTER},${view_route}," "$WRAPPERS_VIEW")>>"$tmp2"
         # Wrap content with view wrapper
-        insert_file_contents '{{\s*content\s*}}' "$tmp2" "$f" && echo "$f"
+        insert_file_contents "$PLACEHOLDER_CONTENT" "$tmp2" "$f" && print_l "$f"
     fi
 done
 
 # Insert views into asset
-insert_file_contents '{{\s*views\s*}}' "$tmp1" "$tmp2"
+insert_file_contents "$PLACEHOLDER_VIEWS" "$tmp1" "$tmp2"
 
 # Perform checks and include static views if true
-is_true "$USE_NAV" && do_include "$VIEW_NAV" && wrap_and_insert_in_asset '{{\s*content\s*}}' "$WRAPPER_NAV" '{{\s*nav\s*}}' "$VIEW_NAV" && echo "$VIEW_NAV" || remove_placeholder_in_asset '{{\s*nav\s*}}'
-is_true "$USE_FRAME" && do_include "$VIEW_FRAME" && wrap_and_insert_in_asset '{{\s*content\s*}}' "$WRAPPER_FRAME" '{{\s*frame\s*}}' "$VIEW_FRAME" && echo "$VIEW_FRAME" || remove_placeholder_in_asset '{{\s*frame\s*}}'
-do_include "$VIEW_HEAD" && insert_file_contents '{{\s*head\s*}}' "$tmp1" "$VIEW_HEAD" && echo "$VIEW_HEAD" || remove_placeholder_in_asset '{{\s*head\s*}}'
-insert_file_contents '{{\s*script\s*}}' "$tmp1" "$script"
+is_true "$USE_NAV" && do_include "$RESOURCES_NAV" && wrap_and_insert_in_asset "$PLACEHOLDER_CONTENT" "$WRAPPERS_NAV" "$PLACEHOLDER_NAV" "$RESOURCES_NAV" && print_l "$RESOURCES_NAV" || remove_placeholder_in_asset "$PLACEHOLDER_NAV"
+is_true "$USE_FRAME" && do_include "$RESOURCES_FRAME" && wrap_and_insert_in_asset "$PLACEHOLDER_CONTENT" "$WRAPPERS_FRAME" "$PLACEHOLDER_FRAME" "$RESOURCES_FRAME" && print_l "$RESOURCES_FRAME" || remove_placeholder_in_asset "$PLACEHOLDER_FRAME"
+do_include "$RESOURCES_HEAD" && insert_file_contents "$PLACEHOLDER_HEAD" "$tmp1" "$RESOURCES_HEAD" && print_l "$RESOURCES_HEAD" || remove_placeholder_in_asset "$PLACEHOLDER_HEAD"
+insert_file_contents "$PLACEHOLDER_SCRIPT" "$tmp1" "$CACHE_SCRIPTS"
 
 # Add asset
 if is_true "$COMPRESS_HTML"
@@ -100,18 +86,18 @@ then
     # Use framework compressor if falsy value
     if [ -z "$USE_COMPRESSOR_HTML" ]
     then
-        compressor='Framework/Scripts/Compressors/_compress_html.sh'
-        $compressor "$tmp1" "$a"
+        compressor="$COMPRESSORS_HTML"
+        $compressor "$tmp1" "$PUBLIC_INDEX"
     else
         compressor=${USE_COMPRESSOR_HTML//INPUT/$tmp1}
-        compressor=${compressor//OUTPUT/$a}
+        compressor=${compressor//OUTPUT/$PUBLIC_INDEX}
         # Unsafe execute
         eval $compressor
     fi
-    echo "COMPRESSOR (HTML): ${compressor}"
+    print_l "COMPRESSOR (HTML): ${compressor}"
 else
-    (cat "$tmp1")>"$a"
+    (cat "$tmp1")>"$PUBLIC_INDEX"
 fi
 
 # Remove created temp files
-rm -rf "$tmp1" "$tmp2" "$script"
+rm -rf "$tmp1" "$tmp2" "$CACHE_SCRIPTS"

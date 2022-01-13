@@ -1,6 +1,0 @@
-/**
- * 
- * 
- * @fatherbrennan
- */
-html{font-size:16px;}body{margin:0;width:100vw;height:100vh;}.window{height:100%;width:100%;}.frame{min-height:29px;max-height:29px;}.app{flex-wrap:nowrap;}.nav{flex:1 10 100%;}.app,.main,.frame,.window,.row,.col,.flex{display:flex;}.row{flex-direction:row;}.app,.window,.col{flex-direction:column;}.app,.main,.frame,.view,.row,.col{flex:1 1 100%;}

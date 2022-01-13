@@ -1,5 +1,4 @@
-function redirect(route){window.location.hash=`${route}`;}
-// Navigate to the app home page defined in routes on startup
+function redirect(route){window.location.hash=`/${route}`;}// Navigate to the app home page defined in routes on startup
 window.addEventListener('DOMContentLoaded', function() {
     if(window.location.hash === '' || !window.location.hash) {
         redirect('home/');

@@ -1,6 +1,6 @@
 # Spinebash
 
-This is a Bash-built, dependency-free SPA framework which allows for a modular programming experience using HTML, CSS and JavaScript. Spinebash aims to be dependency-free and only utilise standard GNU/UNIX tools.
+This is a Bash-built, dependency-free SPA framework which allows for a modular programming experience using HTML, CSS and JavaScript. Spinebash aims to be dependency-free and only utilises standard CLI tools.
 
 Notable Utilised Commands
 

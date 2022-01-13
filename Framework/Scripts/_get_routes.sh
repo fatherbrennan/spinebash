@@ -51,7 +51,7 @@ read_routes()
         r="${args[1]//\'/}"
         [[ "$r" =~ [^-[:alnum:]\/\.\_\~\#\+\?\*\&\%\!\=] ]] && throw_exception ': <<Invalid URL>>' "$1" "$2"
         # Escape '&' - sed interpretes char
-        router_args+="${r//&/\\&}\n"
+        router_args+="/${r//&/\\&}\n"
     fi
 }
 

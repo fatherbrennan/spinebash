@@ -1,39 +1,87 @@
 # Spinebash
-This is a Bash-built, dependency-free SPA framework which allows for a modular programming experience using HTML, CSS and JavaScript. 
+
+This is a Bash-built, dependency-free SPA framework which allows for a modular programming experience using HTML, CSS and JavaScript. Spinebash aims to be dependency-free and only utilise standard GNU/UNIX tools.
+
+Notable Utilised Commands
+
+-   awk
+-   sed
+-   find
+-   perl
+-   truncate
+
 ## File Structure
-**Resources/**
-
-This directory contains all app resources and is mainly used throughout the development process.
-
-**Public/**
-
-This directory contains app asset files, constructed from the *Resources* directory.
-
-**Framework/**
-
-This directory contains all the framework resources.
 
 **.config**
 
-File containing configuration variables taking Boolean assignments ( `true` or `false` ).
+Spinebash configuration file to alter framework behaviour.
+
+**Resources/**
+
+Directory containing application resources.
+
+**Resources/views/static/**
+
+Parent directory of static content and views.
+
+-   File paths are fixed
+-   Content added to asset files will be static throughout application navigation (unless forced manipulation)
+
+Child directories:
+
+-   Head
+    -   Static content inserted inside the &lt;head&gt; tag
+-   Frame
+    -   Content is wrapped inside a &lt;div class="frame"&gt; element
+    -   Spinebash Bootstrap CSS - width: 100%, height: 29px
+    -   Typical usage is for desktop applications through frameworks such as [Electron](https://www.electronjs.org/)
+-   Nav
+    -   Content is wrapped inside a &lt;div class="nav"&gt; element
+    -   View is inserted between the Frame view and the dynamic content views
+    -   (Hint) Reusable elements can be added to nav to be cross-viewable-content
+
+**Resources/views/content/**
+
+Directory containing dynamic views.
+
+-   File paths are dynamic and can be changed
+-   All views are added to the asset file (Public/index.html)
+-   One dynamic view is displayed at a time (declared in routes)
+
+**Resources/routes.sh**
+
+Declare application routes.
+
+**Public/**
+
+Directory containing built asset files.
+
+**Framework/**
+
+Directory containing framework resources.
 
 **set_alias.sh**
 
-Temporary initialisation file to create the `spine` alias command used for the spine console. The alias will be added to the Bash and Zsh *rc file (although all scripts will use Bash interpreter).
+Temporary initialisation executable to add the `spine` alias used for the Spine CLI.
+
 ```sh
-# Run setup command
 . ./set_alias.sh
 ```
-*Note: file should be removed after initialisation*
 
-*Note: file may need correct permissions: `chmod 755 set_alias.sh`*
+Notes
 
+-   File should be removed after initialisation
+-   File requires executable permissions: `chmod 700 set_alias.sh`
+-   Add `spine` alias to Bash and (if exists) Zsh
 
 **spine**
 
-Executable file acting as the Spinebash framework console.
+Spine is the included command line interface used to interact with the Spinebash framework.
 
-`spine --help`
+```sh
+spine --help
+```
+
 ```
 spine
  Usage: spine <command> <extension>
@@ -41,91 +89,119 @@ spine
 commands
 
  start, dev
-        build app assets in dev mode
+	build app assets in dev mode
 
  open
-        open the app in the default web browser
+	open the app in the default web browser
 
  clear
-        clear the framework cache including assets
+	clear the framework cache including assets
 
  -h, --help
-        display command info
+	display command info
 
 extensions
 
  -s, --script
-        extends [ start ] [ dev ]
-          run config SCRIPT_TAIL after spine build process
+	extends [ start ] [ dev ]
+	  run config SCRIPT_TAIL after spine build process
 
-exmaples
+examples
 
  spine dev --script
-        run dev build process and then run config defined script
-        where SCRIPT_TAIL="npm dev". Can be used within framework
-        environments such as the Electron framework
+	run dev build process and then run config defined script
+	where SCRIPT_TAIL="npm dev". Can be used within framework
+	environments such as the Electron framework
 
  spine open
-        open the Public/index.html file using the machine's
-        default web browser
+	open the Public/index.html file using the machine's
+	default web browser
 ```
-*Note: `dev` and `start` commands are currently the same*
+
+Notes
+
+-   `dev` and `start` commands are currently the same
+
 ## Routing
-Self implemented HashRouter using hash anchors.
 
-**Declare**
+Self implemented hash router using hash anchors and CSS3.
 
-`routes.sh`
-|Variable|Description|
-|-|-|
-|ROUTE|(Unique) URL Hash route|
-|VIEW|(Unique) Relative file path from: `Resources/views/content/`|
+### **Declare Routes**
+
+VIEW and ROUTE are associated by line.
+
+**Variables**
+
+-   `VIEW`
+
+    -   Unique
+    -   Valid URL hash route
+
+-   `ROUTE`
+    -   Unique
+    -   Relative file path from `Resources/views/content/`
+    -   No file format suffix (`html` assumed)
+
 ```sh
-# Decalre app routes
+# Resources/routes.sh
 ROUTE 'home/' VIEW 'index'
-ROUTE 'test/' VIEW 'test_dir/test_file'
+ROUTE 'newpage/' VIEW 'new_page_dir/new_page_file'
 ```
-**Option 1: HTML**
+
+### **View Navigation**
+
+Methods to navigate between dynamic views.
+
+**(Option 1) HTML**
 
 ```html
-<a href="#test/" class="btn">Go New Page</a>
+<!-- Prefix '#/' -->
+<a href="#/newpage/" class="btn">Go New Page</a>
 ```
 
-**Option 2: JavaScript**
+**(Option 2) JavaScript**
 
 ```html
-<span id="button" class="btn">Go New Page</span>
+<span id="home-button" class="btn">Go New Page</span>
 ```
+
 ```js
 // On element click, redirect to new page
-document.getElementById('button').addEventListener('click',function(){
-    redirect('test/');
-})
+document.getElementById('home-button').addEventListener('click', function () {
+    redirect('newpage/');
+});
 ```
+
 ## Limitations
+
 ### File Naming
-- camelCase
-- PascalCase
-- snake_case
-- kebab-case
+
+-   camelCase
+-   PascalCase
+-   snake_case
+-   kebab-case
+
 ### Build
+
 **JavaScript**
-- Files are not concatenated
-- File names are to be unique even in nested directories
 
-It is recommended to create a single file if possible for performance.
+-   Files are not concatenated
+-   File names are to be unique even in nested directories
+-   (Recommendation) create single file if possible for performance
 
-**Compresson**
+**Compression**
 
 CSS and HTML compression support is good assuming correct coding practices. JavaScript compression support is beta, and support is limited (not recommended).
 
 Pros
-- Remove comments
-- Remove whitespace
+
+-   Remove comments
+-   Remove whitespace
 
 Cons
-- Variable names are unchanged
-- Semicolons not inserted
+
+-   Variable names are unchanged
+-   Semicolons not inserted
 
 ## Third-Party Support
 
@@ -135,4 +211,14 @@ The Spinebash framework does not, and tries not to limit developer-preferred dep
 
 **Compressors**
 
-The popular [Terser](https://github.com/terser/terser) and [UglifyJS](https://github.com/mishoo/UglifyJS) for JavaScript compression.
+Popular JavaScript compressors
+
+-   [Terser](https://github.com/terser/terser)
+-   [UglifyJS](https://github.com/mishoo/UglifyJS)
+
+```sh
+# .config
+
+# Example usage
+USE_COMPRESSOR_JS="terser INPUT -o OUTPUT"
+```

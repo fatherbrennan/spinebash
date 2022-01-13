@@ -46,7 +46,7 @@ then
             # Add router to first asset
             is_true "$add_router" && router_contents=$(cat "$CONTROLLERS_LOCAL_JS") && add_router=false || router_contents=''
             # Check config file and compress asset file if true, then add assets
-            (echo -e "$router_contents";cat "$f")>"$tmp1"
+            (printf "$router_contents";cat "$f")>"$tmp1"
             $compressor "$tmp1" "$script"
             # Add script tag to temp file
             add_html_script_tag "$script"
@@ -79,7 +79,7 @@ else
         # Add router to first asset
         is_true "$add_router" && router_contents=$(cat "$CONTROLLERS_LOCAL_JS") && add_router=false || router_contents=''
         # Check config file and compress asset file if true, then add assets
-        (echo -e "$router_contents";cat "$f")>"$tmp1"
+        (printf "$router_contents";cat "$f")>"$tmp1"
         (cat "$tmp1")>"$script"
         # Add script tag to temp file
         add_html_script_tag "$script"

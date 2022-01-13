@@ -46,7 +46,7 @@ then
         # Unsafe execute
         eval $compressor
     fi
-    echo "COMPRESSOR (CSS): ${compressor}"
+    print_l "COMPRESSOR (CSS): ${compressor}"
 else
     # Use uncompressed file path
     asset_css="${PUBLIC_DIR_CSS}${OUTPUT_UNCOMPRESSED_CSS}"

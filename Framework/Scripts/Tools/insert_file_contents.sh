@@ -5,6 +5,7 @@
 # Imports
 source 'Framework/.env'
 source "$TOOLS_SET_FILE_PATH"
+source "$TOOLS_PRINT_L"
 
 #
 # {$1} placeholder [ RegEx pattern ]
@@ -16,11 +17,11 @@ source "$TOOLS_SET_FILE_PATH"
 #
 insert_file_contents()
 {
-    local a=$(sed "/$1/r $3" "$2" | sed "s/$1//")
+    local a=$(sed "/$1/r $3" "$2" | sed "/$1/d")
     if [ -z "$4" ]
     then
-        printf '%s' "$a">"$2"
+        print_l "$a">"$2"
     else
-        set_file_path "$4" && printf '%s' "$a">"$4"
+        set_file_path "$4" && print_l "$a">"$4"
     fi
 }

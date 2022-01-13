@@ -26,7 +26,7 @@ tmp2=$(get_tmp)
 #
 remove_placeholder_in_asset()
 {
-    local a=$(sed "s/$1//" "$tmp1")
+    local a=$(sed "/$1/d" "$tmp1")
     printf '%s' "$a">"$tmp1"
 }
 

@@ -8,6 +8,7 @@ t1=$(date +%s.%N)
 # Imports
 source 'Framework/.env'
 source "$TOOLS_ANSI_ESC_CODES"
+source "$TOOLS_SET_DIR_PATH"
 
 # Get relative path from arg
 app="$1"
@@ -15,8 +16,11 @@ app="$1"
 # Track asset files
 assets=()
 
-# Create cache directory if it doesn't exist
-[ -d "$CACHE_DIR_TMP" ] || mkdir -p "$CACHE_DIR_TMP"
+# Prepare cache directory
+set_dir_path "$CACHE_DIR_TMP"
+
+# Prepare asset directory
+set_dir_path "$PUBLIC_DIR"
 
 # Clear cache
 "$SPINE_CLEAR"

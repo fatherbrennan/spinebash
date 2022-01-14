@@ -8,6 +8,7 @@ source "$CONFIG"
 source "$TOOLS_GET_TMP"
 source "$TOOLS_IS_TRUE"
 source "$TOOLS_PRINT_L"
+source "$TOOLS_SET_DIR_PATH"
 source "$TOOLS_SET_FILE_PATH"
 
 # Limit temp files to the framework cache
@@ -15,6 +16,9 @@ tmp1=$(get_tmp)
 
 # Prepare script cache file
 set_file_path "$CACHE_SCRIPTS"
+
+# Prepare asset directory
+set_dir_path "$PUBLIC_DIR_JS"
 
 # Check config file if scripts should use defer attribute
 is_true "$JS_DEFER" && defer=' defer' || defer=''

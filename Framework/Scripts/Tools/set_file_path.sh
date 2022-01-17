@@ -18,6 +18,6 @@ set_file_path()
             touch "$a" || exit 1
         fi
     else
-        truncate -s 0 "$1"
+        printf '%s' ''>"$1"
     fi
 }

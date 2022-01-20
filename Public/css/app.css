@@ -3,7 +3,7 @@
  * 
  * @fatherbrennan
  */
-html{font-size:16px;}body{margin:0;width:100vw;height:100vh;}.window{height:100%;width:100%;}.frame{min-height:29px;max-height:29px;}.app{flex-wrap:nowrap;}.nav{flex:1 10 100%;}.app,.main,.frame,.window,.row,.col,.flex{display:flex;}.row{flex-direction:row;}.app,.window,.col{flex-direction:column;}.app,.main,.frame,.view,.row,.col{flex:1 1 100%;}.view{display:none;}.view:target{display:flex !important;}body {
+html{font-size:16px;}body{margin:0;width:100vw;height:100vh;}.window{height:100%;width:100%;}.frame{min-height:29px;max-height:29px;z-index:2147483647;}.app{flex-wrap:nowrap;}.app,.main,.frame,.view,.row,.col{flex:1 0 auto;}.row,.flx-row{flex-direction:row;}.app,.window,.col,.flx-col{flex-direction:column;}.app,.nav,.main,.frame,.window,.row,.col,.flx-1,.flx-2,.flx-3,.flx-4,.flx-5,.flx-6,.flx-7,.flx-8,.flx-9,.flx-10,.flx-11,.flx-12,.flx-row,.flx-col,.flx{display:flex;}.flx-1{flex:1 0 8.33%;}.flx-2{flex:1 0 16.66%;}.flx-3{flex:1 0 25%;}.flx-4{flex:1 0 33.333%;}.flx-5{flex:1 0 41.666%;}.flx-6{flex:1 0 50%;}.flx-7{flex:1 0 58.333%;}.flx-8{flex:1 0 66.666%;}.flx-9{flex:1 0 75%;}.flx-10{flex:1 0 83.333%;}.flx-11{flex:1 0 91.666%;}.flx-12{flex:1 0 100%;}.view{display:none;}.view:target{display:flex !important;}body {
     font-family: arial;
 }
 

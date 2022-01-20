@@ -28,7 +28,7 @@ tar xvf spinebash-1.0.0.tar.gz && rm -rf spinebash-1.0.0.tar.gz
 spine --version
 ```
 
--   Complete steps in [Spine Installation](spine-installation) if unregistered command.
+-   Complete steps in [Spine Installation](#spine-installation) if unregistered command.
 
 ## File Structure
 
@@ -238,7 +238,7 @@ Cons
 
 ## Third-Party Support
 
-The Spinebash framework does not, and tries not to limit developer-preferred dependencies.
+The Spinebash framework tries not to limit developer-preferred dependencies.
 
 ### Recommendations
 

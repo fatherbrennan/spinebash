@@ -104,7 +104,7 @@ dev | start)
         *) throw_invalid_exception "'${1}' is not a valid extension" " $(usage)" "$(show_help_redirect)" ;;
         esac
     fi
-    "$SPINE_DEV" "$app" && [ -n "$EXTENSION" ] && "$EXTENSION"
+    "$SPINE_DEV" "$app" && [ -n "$EXTENSION" ] && $EXTENSION
     ;;
 clear)
     "$SPINE_CLEAR" && exit 0

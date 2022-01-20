@@ -1,14 +1,34 @@
 # Spinebash
 
-This is a Bash-built, dependency-free SPA framework which allows for a modular programming experience using HTML, CSS and JavaScript. Spinebash aims to be dependency-free and only utilises standard CLI tools.
+This is a Bash-built, dependency-free SPA framework which allows for a modular programming experience using HTML, CSS and JavaScript.
 
-Notable Utilised Commands
+Spinebash utilises standard CLI tools commonly pre-installed with standard Linux/Unix systems - notably [find](https://www.gnu.org/software/findutils/manual/html_mono/find.html) and [perl](https://perldoc.perl.org/perlrun).
 
--   awk
--   sed
--   find
--   perl
--   truncate
+## Installation
+
+**1. Download Archive**
+
+```sh
+# With Wget
+wget --no-check-certificate --content-disposition https://github.com/fatherbrennan/spinebash/raw/master/spinebash-1.0.0.tar.gz
+
+# With cURL
+curl -JLO https://github.com/fatherbrennan/spinebash/raw/master/spinebash-1.0.0.tar.gz
+```
+
+**2. Extract and Remove Archive**
+
+```sh
+tar xvf spinebash-1.0.0.tar.gz && rm -rf spinebash-1.0.0.tar.gz
+```
+
+**3. Confirm Spine CLI is Installed**
+
+```sh
+spine --version
+```
+
+-   Complete steps in [Spine Installation](spine-installation) if unregistered command.
 
 ## File Structure
 
@@ -60,68 +80,6 @@ Directory containing built asset files.
 
 Directory containing framework resources.
 
-**set_alias.sh**
-
-Temporary initialisation executable to add the `spine` alias used for the Spine CLI.
-
-```sh
-. ./set_alias.sh
-```
-
-Notes
-
--   File should be removed after initialisation
--   File requires executable permissions: `chmod 700 set_alias.sh`
--   Add `spine` alias to Bash and (if exists) Zsh
-
-**spine**
-
-Spine is the included command line interface used to interact with the Spinebash framework.
-
-```sh
-spine --help
-```
-
-```
-spine
- Usage: spine <command> <extension>
-
-commands
-
- start, dev
-	build app assets in dev mode
-
- open
-	open the app in the default web browser
-
- clear
-	clear the framework cache including assets
-
- -h, --help
-	display command info
-
-extensions
-
- -s, --script
-	extends [ start ] [ dev ]
-	  run config SCRIPT_TAIL after spine build process
-
-examples
-
- spine dev --script
-	run dev build process and then run config defined script
-	where SCRIPT_TAIL="npm dev". Can be used within framework
-	environments such as the Electron framework
-
- spine open
-	open the Public/index.html file using the machine's
-	default web browser
-```
-
-Notes
-
--   `dev` and `start` commands are currently the same
-
 ## Routing
 
 Self implemented hash router using hash anchors and CSS3.
@@ -170,6 +128,81 @@ Methods to navigate between dynamic views.
 document.getElementById('home-button').addEventListener('click', function () {
     redirect('newpage/');
 });
+```
+
+## Spine CLI
+
+Spine is the command line interface used to interact with the Spinebash framework.
+
+```sh
+spine --help
+```
+
+```
+spine
+ Usage: spine <command> <extension>
+
+commands
+
+ dev, start
+        build app assets in dev mode
+
+ clear
+        clear the framework cache including assets
+
+ open
+        open the app in the default web browser
+
+ -h, --help
+        display command info
+
+ -v, --version
+        display version info
+
+extensions
+
+ -s, --script
+        extends [ start ] [ dev ]
+          run config SCRIPT_TAIL after spine build process
+
+examples
+
+ spine dev --script
+        run dev build process and then run config defined script
+        where SCRIPT_TAIL="npm dev". Can be used within framework
+        environments such as the Electron framework
+
+ spine open
+        open the Public/index.html file using the machine's
+        default web browser
+```
+
+Notes
+
+-   `dev` and `start` commands are currently the same
+
+## Spine Installation
+
+**1. Download Archive**
+
+```sh
+# With Wget
+wget --no-check-certificate --content-disposition https://github.com/fatherbrennan/spinebash/raw/master/spine_cli_installer_1.0.0.sh
+
+# With cURL
+curl -JLO https://github.com/fatherbrennan/spinebash/raw/master/spine_cli_installer_1.0.0.sh
+```
+
+**2. Add Permissions and Execute**
+
+```sh
+chmod 700 spine_cli_installer_1.0.0.sh && . ./spine_cli_installer_1.0.0.sh
+```
+
+**3. Confirm Spine CLI is Installed**
+
+```sh
+spine --version
 ```
 
 ## Limitations

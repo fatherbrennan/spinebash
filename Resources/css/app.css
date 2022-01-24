@@ -2,6 +2,10 @@ body {
     font-family: arial;
 }
 
+.header {
+    height: 3rem;
+}
+
 .homepage {
     background-color: lightcoral;
 }

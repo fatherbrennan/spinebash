@@ -58,11 +58,13 @@ then
     else
         # Asset file name
         input_files=''
+        # Add router
+        input_files+="${CONTROLLERS_LOCAL_JS} "
         for f in $(find "$RESOURCES_DIR_JS" -type f -name '*.js')
         do
             # Track populated files
             [ -s "$f" ] && print_l "$f"
-            # Add router
+            # Add resource asset
             input_files+="${f} "
         done
         # Add script tag to temp file

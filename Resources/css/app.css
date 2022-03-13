@@ -2,26 +2,35 @@ body {
     font-family: arial;
 }
 
-.header {
+.navbar {
+    background-color: rgb(30, 30, 30);
+}
+
+.navbar-icon {
     height: 3rem;
 }
 
-.homepage {
+.page {
+    padding-bottom: 1rem;
+}
+
+.lightcoral {
     background-color: lightcoral;
 }
 
-.newpage {
+.lightseagreen {
     background-color: lightseagreen;
 }
 
 .btn {
-    border-radius: 0.5rem;
-    padding: 0.375rem;
-    width: max-content;
     border: 1px solid azure;
+    border-radius: 0.5rem;
     color: azure;
     cursor: pointer;
+    padding: 0.375rem;
     text-decoration: none;
+    user-select: none;
+    width: max-content;
 }
 
 .btn:hover {

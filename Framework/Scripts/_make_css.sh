@@ -53,6 +53,8 @@ else
     # Prepare asset
     set_file_path "$asset_css"
     (cat "$tmp1")>"$asset_css"
+    # Add link (stylesheet) tag to temp file
+    (print_l "<link rel=\"stylesheet\" href=\"css/${OUTPUT_UNCOMPRESSED_CSS}\">")>>"$CACHE_STYLES"
 fi
 
 # Remove created temp files

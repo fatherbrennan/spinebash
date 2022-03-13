@@ -79,6 +79,7 @@ is_true "$USE_NAV" && do_include "$RESOURCES_NAV" && wrap_and_insert_in_asset "$
 is_true "$USE_FRAME" && do_include "$RESOURCES_FRAME" && wrap_and_insert_in_asset "$PLACEHOLDER_CONTENT" "$WRAPPERS_FRAME" "$PLACEHOLDER_FRAME" "$RESOURCES_FRAME" && print_l "$RESOURCES_FRAME" || remove_placeholder_in_asset "$PLACEHOLDER_FRAME"
 do_include "$RESOURCES_HEAD" && insert_file_contents "$PLACEHOLDER_HEAD" "$tmp1" "$RESOURCES_HEAD" && print_l "$RESOURCES_HEAD" || remove_placeholder_in_asset "$PLACEHOLDER_HEAD"
 insert_file_contents "$PLACEHOLDER_SCRIPT" "$tmp1" "$CACHE_SCRIPTS"
+insert_file_contents "$PLACEHOLDER_STYLES" "$tmp1" "$CACHE_STYLES"
 
 # Add asset
 if is_true "$COMPRESS_HTML"

@@ -3,36 +3,48 @@
 
     <head>
         <meta name="viewport" content="width=device-width,initial-scale=1.0">
-        <link rel="stylesheet" href="css/app.css">
 <meta charset="UTF-8" />
 <meta name="author" content="" />
 <title>Spinebash</title>
+<link rel="stylesheet" href="css/app.css">
     </head>
 
     <body>
         <div class="window">
             <div class="app">
-<div class="nav">
-<div class="row" style="background-color: #1e1e1e">
-    <a href="#/home/">
-        <img class="header" src="src/img/spinebash.svg" />
-    </a>
+<header class="nav">
+<nav class="container navbar">
+    <div class="row">
+        <div class="col-2">
+            <a href="#/home/">
+                <img class="navbar-icon" src="src/img/spinebash.svg" />
+            </a>
+        </div>
+    </div>
+</nav>
+</header>
+                <main class="main">
+<section class="view" id="/newpage/">
+<div class="container lightseagreen">
+    <div class="row">
+        <div class="col-12 page">
+            <h1>New Page Content</h1>
+            <span id="newpage-button" class="btn">Go Home Page</span>
+        </div>
+    </div>
 </div>
+</section>
+<section class="view" id="/home/">
+<div class="container lightcoral">
+    <div class="row">
+        <div class="col-12 page">
+            <h1>Home Page Content</h1>
+            <a class="btn" href="#/newpage/">Go New Page</a>
+        </div>
+    </div>
 </div>
-                <div class="main">
-<div class="view" id="/newpage/">
-<div class="col newpage">
-    <h1>New Page Content</h1>
-    <span id="newpage-button" class="btn">Go Home Page</span>
-</div>
-</div>
-<div class="view" id="/home/">
-<div class="col homepage">
-    <h1>Home Page Content</h1>
-    <a class="btn" href="#/newpage/">Go New Page</a>
-</div>
-</div>
-                </div>
+</section>
+                </main>
             </div>
         </div>
 <script src="js/app.js"></script>

@@ -3,8 +3,8 @@
 
     <head>
         <meta name="viewport" content="width=device-width,initial-scale=1.0">
-        <link rel="stylesheet" href="css/app.css">
         {{ head }}
+        {{ styles }}
     </head>
 
     <body>
@@ -12,9 +12,9 @@
             {{ frame }}
             <div class="app">
                 {{ nav }}
-                <div class="main">
+                <main class="main">
                     {{ views }}
-                </div>
+                </main>
             </div>
         </div>
         {{ script }}

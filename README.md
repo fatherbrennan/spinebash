@@ -49,6 +49,10 @@ Parent directory of static content and views.
 
 Child directories:
 
+-   404
+    -   Treated and wrapped like a **view**.
+    -   View to be displayed on invalid route navigation.
+    -   Default route: `/http_404/`
 -   Head
     -   Static content inserted inside the &lt;head&gt; tag
 -   Frame

@@ -49,6 +49,10 @@ Parent directory of static content and views.
 
 Child directories:
 
+-   404
+    -   Treated and wrapped like a **view**.
+    -   View to be displayed on invalid route navigation.
+    -   Default route: `/http_404/`
 -   Head
     -   Static content inserted inside the &lt;head&gt; tag
 -   Frame
@@ -74,7 +78,16 @@ Declare application routes.
 
 **Public/**
 
-Directory containing built asset files.
+Directory containing asset files.
+
+**Public/src/**
+
+Protected asset directory, untouched by framework scripts. Can contain directories, files, images, JSON databases, etc.
+
+```html
+<!-- Use relative path from src/ -->
+<img class="header" src="src/img/icon.svg" />
+```
 
 **Framework/**
 

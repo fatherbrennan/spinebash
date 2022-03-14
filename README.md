@@ -10,16 +10,16 @@ Spinebash utilises standard CLI tools commonly pre-installed with standard Linux
 
 ```sh
 # With Wget
-wget --no-check-certificate --content-disposition https://github.com/fatherbrennan/spinebash/raw/master/spinebash-1.0.0.tar.gz
+wget --no-check-certificate --content-disposition https://github.com/fatherbrennan/spinebash/raw/master/spinebash-1.0.1.tar.gz
 
 # With cURL
-curl -JLO https://github.com/fatherbrennan/spinebash/raw/master/spinebash-1.0.0.tar.gz
+curl -JLO https://github.com/fatherbrennan/spinebash/raw/master/spinebash-1.0.1.tar.gz
 ```
 
 **2. Extract and Remove Archive**
 
 ```sh
-tar xvf spinebash-1.0.0.tar.gz && rm -rf spinebash-1.0.0.tar.gz
+tar xvf spinebash-1.0.1.tar.gz && rm -rf spinebash-1.0.1.tar.gz
 ```
 
 **3. Confirm Spine CLI is Installed**

@@ -47,6 +47,9 @@ wrap_and_insert_in_asset()
 IFS=' ' read -ra routes_array <<< "$(cat $CACHE_ROUTES)"
 routes_array_len="${#routes_array[@]}"
 
+# Wrap http 404 error view and include
+do_include "$RESOURCES_404" && (sed "s,${PLACEHOLDER_ROUTER},/http_404/," "$WRAPPERS_VIEW")>>"$tmp2" && insert_file_contents "$PLACEHOLDER_CONTENT" "$tmp2" "$RESOURCES_404" && print_l "$RESOURCES_404"
+
 # Loop through all content views
 for f in $(find "$RESOURCES_DIR_VIEWS_CONTENT" -type f -name '*.html')
 do
